@@ -2,13 +2,12 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as LocAR from "locar";
 
-// Manejo seguro del export según la versión del bundle de LocAR
 const App = LocAR.App || LocAR.default?.App || LocAR.default;
 
-// COORDENADA OBJETIVO: a ~10 metros al norte de tu posición
+
 const TARGET = {
-  lat: -2.288423,
-  lon: -78.116956,
+  lat: -2.278729,
+  lon: -78.124235,
   name: "LABORATORIO DE REDES"
 };
 
@@ -20,7 +19,7 @@ const statusText = document.getElementById("status");
 
 let app, locar;
 
-// Función para crear la etiqueta flotante (Sprite 2D)
+
 function createInfoLabel() {
   const labelCanvas = document.createElement("canvas");
   labelCanvas.width = 1024;
@@ -86,7 +85,7 @@ startBtn.addEventListener("click", async () => {
 
     locar = await app.start();
 
-    // Luces seguras
+  
     const activeScene = locar.scene || app.scene;
     if (activeScene) {
       const ambientLight = new THREE.AmbientLight(0xffffff, 2.5);
@@ -110,14 +109,14 @@ startBtn.addEventListener("click", async () => {
         firstPosition = false;
         statusText.innerText = "GPS detectado. Cargando modelo 3D...";
 
-        // 1. Cubos de calibración (~30m)
+        
         const d = 0.0003;
         locar.add(makeBox(0xff0000, 4), coords.longitude, coords.latitude + d, 1); // Norte
         locar.add(makeBox(0xffff00, 4), coords.longitude, coords.latitude - d, 1); // Sur
         locar.add(makeBox(0x00ffff, 4), coords.longitude - d, coords.latitude, 1); // Oeste
         locar.add(makeBox(0x00ff00, 4), coords.longitude + d, coords.latitude, 1); // Este
 
-        // 2. Cargar GLB + Etiqueta
+        
         const loader = new GLTFLoader();
         loader.load(
           "/models/router.glb",
